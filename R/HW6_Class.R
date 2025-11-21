@@ -1,4 +1,4 @@
-## HW5 Class/Methods
+## HW6 Class/Methods
 
 setClass(
   Class = "sparse_numeric",
@@ -21,7 +21,7 @@ setGeneric("sparse_add", function(x, y) standardGeneric("sparse_add"))
 setGeneric("sparse_sub", function(x, y) standardGeneric("sparse_sub"))
 setGeneric("sparse_mult", function(x, y) standardGeneric("sparse_mult"))
 setGeneric("sparse_crossprod", function(x, y) standardGeneric("sparse_crossprod"))
-setGeneric("norm", function(x, y) standardGeneric("norm"))
+setGeneric("norm", function(x) standardGeneric("norm"))
 setGeneric("standardize", function(x) standardGeneric("standardize"))
 
 setMethod("sparse_add", c("sparse_numeric", "sparse_numeric"), function(x, y){
@@ -120,34 +120,31 @@ setMethod("length", "sparse_numeric", function(x){
   x@length
 })
 
-setMethod("mean", "sparse_numeric", function(x, y){
-  total_sum = sum(x@value)
-  n = x@length
-  total_sum/n
+setMethod("mean", "sparse_numeric", function(x){
+  sum(x@value)/x@length
 })
 
-setMethod("norm", "sparse_numeric", function(x, y){
+setMethod("norm", "sparse_numeric", function(x){
   sqrt(sum(x@value^2))
 })
 
 setMethod("standardize", "sparse_numeric", function(x){
   average = mean(x)
   n = x@length
-  var_nonzero = sum((x@value - average)^2)
+  var = sum((x@value - average)^2)
   n_zero = n - length(x@value)
-  var_zero = n_zero * (average^2)
-  sd_x = sqrt((var_nonzero + var_zero)/n)
-  if (sd_x == 0) {
-    warning("Standard deviation is zero — returning zero vector.")
+  var_zero = n_zero*(average^2)
+  std = sqrt((var + var_zero)/n)
+  if (std == 0){
     return(new("sparse_numeric",
-               value = numeric(0),
-               pos   = integer(0),
-               length = x@length))
+               value=numeric(0),
+               pos=integer(0),
+               length=x@length))
   }
-  new_values = (x@value - average)/sd_x
-  keep = which(new_values != 0)
+  result = (x@value - average)/std
+  non_zeros = which(result != 0)
   new("sparse_numeric",
-      value = new_values[keep],
-      pos = x@pos[keep],
-      length = x@length)
+      value=result[non_zeros],
+      pos=x@pos[non_zeros],
+      length=x@length)
 })
