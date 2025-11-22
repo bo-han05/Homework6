@@ -1,14 +1,16 @@
 Package: Homework6
 Title: Sparse Vector Package
 Version: 0.0.0.9000
-Authors@R: 
+Authors@R:
     person("Bo", "Han", , "hanbo@utexas.edu", role = c("aut", "cre"))
-Description: Implements a sparse numeric vector class and associated methods for arithmetic, mean, norm, and standardization.
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+Description: Implements a sparse numeric vector class and additional methods for arithmetic operators, mean, norm, and standardization.
+License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
-Suggests: 
+Imports:
+    methods,
+    graphics
+Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3

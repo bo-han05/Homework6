@@ -1,5 +1,14 @@
 ## HW6 Class/Methods
 
+#' @importFrom methods new show
+#' @importFrom graphics points legend
+NULL
+
+#' sparse_numeric Class
+#' @slot value non-zero values
+#' @slot pos positions of values
+#' @slot length length of vector
+#' @export
 setClass(
   Class = "sparse_numeric",
   slots = c(
@@ -9,8 +18,6 @@ setClass(
   )
 )
 
-#'
-#'
 setValidity("sparse_numeric", function(object){
   if (length(object@value) != length(object@pos))
     return("The number of non-zero elements should match the number of index positions.")
@@ -19,41 +26,62 @@ setValidity("sparse_numeric", function(object){
   TRUE
 })
 
-#' @name sparse_add
+#' Add two sparse_numeric vectors
+#'
+#' Generic function for adding two sparse_numeric objects
+#'
 #' @param x generic sparse_add
 #' @param y generic sparse_add
 #' @export
 setGeneric("sparse_add", function(x, y) standardGeneric("sparse_add"))
 
-#' @name sparse_sub
+#' Subtracting two sparse_numeric vectors
+#'
+#' Generic function for subtracting two sparse_numeric objects
+#'
 #' @param x generic sparse_sub
 #' @param y generic sparse_sub
 #' @export
 setGeneric("sparse_sub", function(x, y) standardGeneric("sparse_sub"))
 
-#' @name sparse_mult
+#' Multiplying two sparse_numeric vectors
+#'
+#' Generic function for multiplying two sparse_numeric objects
+#'
 #' @param x generic sparse_mult
 #' @param y generic sparse_mult
 #' @export
 setGeneric("sparse_mult", function(x, y) standardGeneric("sparse_mult"))
 
-#' @name sparse_crossprod
+#' Finding cross-product of two sparse_numeric vectors
+#'
+#' Generic function for finding cross-product of two sparse_numeric objects
+#'
 #' @param x generic sparse_crossprod
 #' @param y generic sparse_crossprod
 #' @export
 setGeneric("sparse_crossprod", function(x, y) standardGeneric("sparse_crossprod"))
 
-#' @name sparse_norm
+#' Find squared norm of a sparse_numeric vector
+#'
+#' Generic function for finding squared norm of a sparse_numeric vector
+#'
 #' @param x generic sparse_norm
 #' @export
 setGeneric("norm", function(x) standardGeneric("norm"))
 
-#' @name sparse_standardize
+#' Standardize a sparse_numeric vector
+#'
+#' Generic function for standardizing a sparse_numeric vector
+#'
 #' @param x generic sparse_standardize
 #' @export
 setGeneric("standardize", function(x) standardGeneric("standardize"))
 
-#' @name sparse_add
+#' Adding two sparse_numeric vectors
+#'
+#' Method for adding two sparse_numeric vectors
+#'
 #' @param x method sparse_add
 #' @param y method sparse_add
 #' @export
@@ -72,7 +100,10 @@ setMethod("sparse_add", c("sparse_numeric", "sparse_numeric"), function(x, y){
       length=x@length)
 })
 
-#' @name sparse_sub
+#' Subtracting two sparse_numeric vectors
+#'
+#' Method for subtracting two sparse_numeric vectors
+#'
 #' @param x method sparse_sub
 #' @param y method sparse_sub
 #' @export
@@ -91,7 +122,10 @@ setMethod("sparse_sub", c("sparse_numeric", "sparse_numeric"), function(x, y){
       length=x@length)
 })
 
-#' @name sparse_mult
+#' Multiplying two sparse_numeric vectors
+#'
+#' Method for multiplying two sparse_numeric vectors
+#'
 #' @param x method sparse_mult
 #' @param y method sparse_mult
 #' @export
@@ -106,7 +140,10 @@ setMethod("sparse_mult", c("sparse_numeric", "sparse_numeric"), function(x, y){
       length=x@length)
 })
 
-#' @name sparse_crossprod
+#' Finding cross-product of two sparse_numeric vectors
+#'
+#' Method for finding cross-product of two sparse_numeric vectors
+#'
 #' @param x method sparse_crossprod
 #' @param y method sparse_crossprod
 #' @export
@@ -116,7 +153,10 @@ setMethod("sparse_crossprod", c("sparse_numeric", "sparse_numeric"), function(x,
   sum(x@value[match(xy_pos, x@pos)] * y@value[match(xy_pos, y@pos)])
 })
 
-#' @name sparse_arithmetic_add
+#' Adding two sparse_numeric vectors
+#'
+#' Method for adding two sparse_numeric vectors with "+"
+#'
 #' @param e1 arithmetic "+"
 #' @param e2 arithmetic "+"
 #' @export
@@ -125,7 +165,10 @@ setMethod("+", signature(e1="sparse_numeric", e2="sparse_numeric"),
             sparse_add(e1, e2)
           })
 
-#' @name sparse_arithmetic_sub
+#' Subtracting two sparse_numeric vectors
+#'
+#' Method for subtracting two sparse_numeric vectors with "-"
+#'
 #' @param e1 arithmetic "-"
 #' @param e2 arithmetic "-"
 #' @export
@@ -134,7 +177,10 @@ setMethod("-", signature(e1="sparse_numeric", e2="sparse_numeric"),
             sparse_sub(e1, e2)
           })
 
-#' @name sparse_arithmetic_mult
+#' Multiplying two sparse_numeric vectors
+#'
+#' Method for multiplying two sparse_numeric vectors with "*"
+#'
 #' @param e1 arithmetic "*"
 #' @param e2 arithmetic "*"
 #' @export
@@ -157,9 +203,12 @@ setAs("sparse_numeric", "numeric", function(from){
   x
 })
 
-#' @name sparse_show
+#' Printing a sparse_numeric vector
+#'
+#' Method for printing a sparse_numeric object
+#'
 #' @param object show method
-#' @export
+#' @exportMethod show
 setMethod("show", "sparse_numeric", function(object){
   cat("Length =", object@length, "\n")
   if (length(object@value) == 0)
@@ -168,7 +217,10 @@ setMethod("show", "sparse_numeric", function(object){
     print(data.frame(value=object@value, pos=object@pos))
 })
 
-#' @name sparse_plot
+#' Plotting two sparse_numeric vectors
+#'
+#' Method for plotting two sparse_numeric vectors
+#'
 #' @param x plot method
 #' @param y plot method
 #' @export
@@ -180,28 +232,40 @@ setMethod("plot", c("sparse_numeric", "sparse_numeric"), function(x, y){
   legend("topright", legend=c("x", "y"), col=c("steelblue", "darkred"), pch=16)
 })
 
-#' @name sparse_length
+#' Returning length of a sparse_numeric vector
+#'
+#' Method for returning length of a sparse_numeric object
+#'
 #' @param x length method
 #' @export
 setMethod("length", "sparse_numeric", function(x){
   x@length
 })
 
-#' @name sparse_mean
+#' Finding the mean of a sparse_numeric vector
+#'
+#' Method for finding the mean of a sparse_numeric object
+#'
 #' @param x mean method
 #' @export
 setMethod("mean", "sparse_numeric", function(x){
   sum(x@value)/x@length
 })
 
-#' @name sparse_norm
+#' Finding squared norm of a sparse_numeric vector
+#'
+#' Method for finding squared norm of a sparse_numeric object
+#'
 #' @param x norm method
 #' @export
 setMethod("norm", "sparse_numeric", function(x){
   sqrt(sum(x@value^2))
 })
 
-#' @name sparse_standardize
+#' Standardizing a sparse_numeric vector
+#'
+#' Method for standardizing a sparse_numeric object
+#'
 #' @param x standardize method
 #' @export
 setMethod("standardize", "sparse_numeric", function(x){
