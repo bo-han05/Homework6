@@ -155,3 +155,32 @@ test_that("check for standardize method when sd = 0", {
   z <- standardize(x)
   expect_equal(as(z, "numeric"), rep(0, 4))
 })
+
+test_that("check for sparse_crossprod method", {
+  x <- as(c(1, 0, 9), "sparse_numeric")
+  y <- as(c(2, 1, 5), "sparse_numeric")
+  expect_equal(sparse_crossprod(x, y), 1*2 + 9*5)
+})
+
+test_that("check for arithmetic operators", {
+  x <- as(c(1, 0, 3), "sparse_numeric")
+  y <- as(c(2, 1, 2), "sparse_numeric")
+  expect_equal(as(x + y, "numeric"), c(3, 1, 5))
+  expect_equal(as(x - y, "numeric"), c(-1, -1, 1))
+  expect_equal(as(x * y, "numeric"), c(2, 0, 6))
+})
+
+test_that("check for show method", {
+  x <- as(c(0, 1, 0, 9), "sparse_numeric")
+  expect_output(show(x), "Length = 4")
+  expect_output(show(x), "value")
+  expect_output(show(x), "pos")
+  y <- as(c(0, 0, 0), "sparse_numeric")
+  expect_output(show(y), "No non-zero elements")
+})
+
+test_that("check for plot method", {
+  x <- as(c(0, 1, 0, 9), "sparse_numeric")
+  y <- as(c(1, 0, 9, 0), "sparse_numeric")
+  expect_silent(plot(x, y))
+})

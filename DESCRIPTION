@@ -1,5 +1,5 @@
 Package: Homework6
-Title: Sparse Vector Package
+Title: Sparse Numeric Vector Package
 Version: 0.0.0.9000
 Authors@R:
     person("Bo", "Han", , "hanbo@utexas.edu", role = c("aut", "cre"))
