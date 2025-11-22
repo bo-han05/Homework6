@@ -1,12 +1,7 @@
 ## HW6_testscript.R
 
 library(testthat)
-
-if(!file.exists("HW6_Class.R")) {
-  stop("cannot find file 'HW6_Class.R'")
-}
-
-source("HW6_Class.R")
+library(Homework6)
 
 test_that("check validity method exists", {
   expect_false({
@@ -127,36 +122,36 @@ test_that("all zero wrong length", {
   })
 })
 
----
-
-test_that("mean calculates correctly", {
-  x <- as(c(0, 1, 0, 3), "sparse_numeric")
-  expect_equal(mean(x), (0+1+0+3)/4)
+test_that("check for mean method", {
+  x <- as(c(0, 1, 0, 9), "sparse_numeric")
+  expect_equal(mean(x), (0 + 1 + 0 + 9) / 4)
 })
 
-test_that("mean of all zeros is zero", {
+test_that("check for mean method when all are zero", {
   x <- as(rep(0, 5), "sparse_numeric")
   expect_equal(mean(x), 0)
 })
 
-test_that("norm calculates correctly", {
-  x <- as(c(0, 3, 0, 4), "sparse_numeric")
-  expect_equal(norm(x), 5)
+test_that("check for norm method", {
+  x <- as(c(0, 1, 0, 9), "sparse_numeric")
+  expect_equal(norm(x), sqrt(1^2 + 9^2))
 })
 
-test_that("norm of all zeros is zero", {
-  x <- as(rep(0, 3), "sparse_numeric")
+test_that("check for norm method when all are zero", {
+  x <- as(rep(0, 4), "sparse_numeric")
   expect_equal(norm(x), 0)
 })
 
-test_that("standardize works for normal vector", {
-  x <- as(c(0, 1, 0, 3), "sparse_numeric")
+test_that("check for standardize method", {
+  x <- as(c(0, 1, 0, 9), "sparse_numeric")
   z <- standardize(x)
-  expect_equal(sum(z@value), sum((x@value - mean(x))/sqrt(sum((x@value - mean(x))^2 + (x@length - length(x@value))*mean(x)^2)/x@length))[1])
+  x_values <- as(x, "numeric")
+  expected <- (x_values - mean(x_values)) / sd(x_values)
+  expect_equal(as(z, "numeric"), expected)
 })
 
-test_that("standardize returns zero vector if SD = 0", {
-  x <- as(rep(5, 4), "sparse_numeric")
+test_that("check for standardize method when sd = 0", {
+  x <- as(rep(0, 4), "sparse_numeric")
   z <- standardize(x)
-  expect_equal(length(z@value), 0)
+  expect_equal(as(z, "numeric"), rep(0, 4))
 })
